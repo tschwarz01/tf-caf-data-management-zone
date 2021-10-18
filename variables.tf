@@ -124,10 +124,13 @@ variable "privatelink-dns-zone-names" {
   default = [
     "privatelink.sql.azuresynapse.net",
     "privatelink.dev.azuresynapse.net",
-    "privatelink.blob.core.windows.net",
+    "privatelink.queue.core.windows.net",
     "privatelink.dfs.core.windows.net",
     "privatelink.blob.core.windows.net",
-    "privatelink.vaultcore.azure.net"
+    "privatelink.servicebus.windows.net",
+    "privatelink.vaultcore.azure.net",
+    "privatelink.purviewstudio.azure.com",
+    "privatelink.purview.azure.com"
   ]
 }
 

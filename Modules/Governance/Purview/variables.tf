@@ -15,12 +15,18 @@ variable "rg_name" {
   default     = "rg-dmz-governance"
 }
 
-variable "dns_rg_id" {
-  type        = string
-  description = "Private DNS Zones Resource Group ID"
-}
 
 variable "svc_subnet_id" {
   type        = string
   description = "Data Management Zone Services Subnet ID"
+}
+
+variable "purview_portal_dns_zone_id" {
+  type        = list(string)
+  description = "Private DNS Zone ID for the Azure Purview (Portal) resource type"
+}
+
+variable "purview_account_dns_zone_id" {
+  type        = list(string)
+  description = "Private DNS Zone ID for the Azure Purview (Account) resource type"
 }
