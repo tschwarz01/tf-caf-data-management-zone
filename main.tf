@@ -1,0 +1,115 @@
+# Configure the Azure provider
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.65"
+    }
+  }
+  backend "azurerm" {
+    resource_group_name  = "rg-data-management-zone-terraform"
+        storage_account_name = "stgdatamgmtzoneterraform"
+        container_name       = "tfstate"
+        key                  = "terraform.tfstate"
+  }
+
+  required_version = ">= 0.14.9"
+}
+
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "rg_dmz_net" {
+  name     = var.rg-dmz-net-name
+  location = var.location
+}
+
+resource "azurerm_resource_group" "rg_dmz_automation" {
+  name     = var.rg-dmz-automation-name
+  location = var.location
+}
+
+
+resource "azurerm_resource_group" "rg_dmz_global_dns" {
+  name     = var.rg-dmz-global-dns-name
+  location = var.location
+}
+
+resource "azurerm_resource_group" "rg_dmz_governance" {
+  name     = var.rg-dmz-governance-name
+  location = var.location
+}
+
+resource "azurerm_resource_group" "rg_dmz_mgmt" {
+  name     = var.rg-dmz-mgmt-name
+  location = var.location
+}
+
+resource "azurerm_resource_group" "rg_dmz_container" {
+  name     = var.rg-dmz-container-name
+  location = var.location
+}
+
+resource "azurerm_resource_group" "rg_dmz_consumption" {
+  name     = var.rg-dmz-consumption-name
+  location = var.location
+}
+
+
+module "dmz-nsg" {
+  source      = "./Modules/Network/NetworkSecurityGroup"
+  rg_name     = azurerm_resource_group.rg_dmz_net.name
+  location    = var.location
+  environment = var.environment
+}
+
+module "dmz-vnet" {
+  source      = "./Modules/Network/VirtualNetwork"
+  location    = var.location
+  environment = var.environment
+  rg_name     = azurerm_resource_group.rg_dmz_net.name
+  nsg_id      = module.dmz-nsg.id_out
+  depends_on = [
+    module.dmz-nsg,
+    azurerm_resource_group.rg_dmz_net
+  ]
+}
+
+module "dmz-firewall" {
+  source       = "./Modules/Network/Firewall"
+  location     = var.location
+  environment  = var.environment
+  rg_name      = azurerm_resource_group.rg_dmz_net.name
+  fw_subnet_id = module.dmz-vnet.firewall_subnet_id_out
+  depends_on = [
+    module.dmz-vnet,
+    azurerm_resource_group.rg_dmz_net
+  ]
+}
+
+module "dmz-private-dns-zones" {
+  source      = "./Modules/Network/PrivateDNSZones"
+  location    = var.location
+  environment = var.environment
+  rg_name     = azurerm_resource_group.rg_dmz_global_dns.name
+  vnet_id     = module.dmz-vnet.dmz_vnet_id_out
+  vnet_name   = module.dmz-vnet.dmz_vnet_name_out
+  dns_zones   = var.privatelink-dns-zone-names
+  depends_on = [
+    azurerm_resource_group.rg_dmz_global_dns,
+    module.dmz-vnet
+  ]
+}
+
+module "dmz-key-vault" {
+  source      = "./Modules/Governance/KeyVault"
+  location    = var.location
+  environment = var.environment
+  rg_name     = azurerm_resource_group.rg_dmz_governance.name
+  dns_rg_id   = azurerm_resource_group.rg_dmz_global_dns.id
+  depends_on = [
+    azurerm_resource_group.rg_dmz_governance,
+    module.dmz-private-dns-zones
+  ]
+}
