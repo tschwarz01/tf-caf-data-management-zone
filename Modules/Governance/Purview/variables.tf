@@ -24,13 +24,3 @@ variable "svc_subnet_id" {
   type        = string
   description = "Data Management Zone Services Subnet ID"
 }
-
-variable "tenant_id" {
-  type        = string
-  description = "Azure tenant id"
-}
-
-variable "keyvault_dns_zone_id" {
-  type        = list(string)
-  description = "Private DNS Zone ID for the Azure Key Vault resource type"
-}

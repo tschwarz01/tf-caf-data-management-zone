@@ -37,6 +37,7 @@ resource "azurerm_firewall_policy" "dmz_firewall_policy" {
   name                = "${var.environment}-firewall-policy"
   resource_group_name = var.rg_name
   location            = var.location
+  sku                 = "Premium"
   intrusion_detection {
     mode = "Deny"
   }

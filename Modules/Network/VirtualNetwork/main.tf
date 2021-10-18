@@ -6,7 +6,7 @@ resource "azurerm_virtual_network" "dmz_vnet" {
 }
 
 resource "azurerm_subnet" "dmz_firewall_subnet" {
-  name                                           = "${var.environment}-firewall-subnet"
+  name                                           = "AzureFirewallSubnet"
   resource_group_name                            = var.rg_name
   virtual_network_name                           = azurerm_virtual_network.dmz_vnet.name
   address_prefixes                               = ["10.0.0.0/24"]

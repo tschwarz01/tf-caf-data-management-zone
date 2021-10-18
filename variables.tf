@@ -58,6 +58,7 @@ variable "rg-dmz-consumption-name" {
   default     = "rg-dmz-consumption"
 }
 
+/*
 variable "privatelink-dns-zone-names" {
   type        = list(string)
   description = "List of Azure Private Link DNS Zone names"
@@ -114,4 +115,24 @@ variable "privatelink-dns-zone-names" {
     "privatelink.digitaltwins.azure.net",
     "privatelink.azurehdinsight.net"
   ]
+}
+*/
+
+variable "privatelink-dns-zone-names" {
+  type        = list(string)
+  description = "List of Azure Private Link DNS Zone names"
+  default = [
+    "privatelink.sql.azuresynapse.net",
+    "privatelink.dev.azuresynapse.net",
+    "privatelink.blob.core.windows.net",
+    "privatelink.dfs.core.windows.net",
+    "privatelink.blob.core.windows.net",
+    "privatelink.vaultcore.azure.net"
+  ]
+}
+
+variable "key_vault_resource_id" {
+  type        = string
+  description = "the resource id of the main key vault"
+  default     = "/subscriptions/47f7e6d7-0e52-4394-92cb-5f106bbc647f/resourceGroups/rg-data-management-zone-terraform/providers/Microsoft.KeyVault/vaults/keyvault-tf"
 }
