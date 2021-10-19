@@ -106,6 +106,7 @@ module "dmz-purview" {
   svc_subnet_id               = module.dmz-vnet.services_subnet_id_out
   purview_portal_dns_zone_id  = [module.dmz-private-dns-zones.priv-dns-zones["privatelink.purviewstudio.azure.com"].id]
   purview_account_dns_zone_id = [module.dmz-private-dns-zones.priv-dns-zones["privatelink.purview.azure.com"].id]
+  keyvault_id                 = module.dmz-key-vault.keyvault-id
   depends_on = [
     azurerm_resource_group.rg_dmz_governance,
     module.dmz-private-dns-zones
@@ -113,8 +114,6 @@ module "dmz-purview" {
 }
 
 
-/*
-# Commenting out temporarily to reduce deploy / destroy time
 
 
 module "dmz-key-vault" {
@@ -132,6 +131,8 @@ module "dmz-key-vault" {
   ]
 }
 
+/*
+# Commenting out temporarily to reduce deploy / destroy time
 
 
 module "dmz-firewall" {

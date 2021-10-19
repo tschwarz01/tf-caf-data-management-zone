@@ -53,3 +53,11 @@ resource "azurerm_private_endpoint" "purview_portal_private_endpoint" {
     azurerm_private_endpoint.purview_account_private_endpoint
   ]
 }
+
+
+resource "azurerm_role_assignment" "purview_keyvault_role_assignment" {
+  scope              = var.keyvault_id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id       = azurerm_purview_account.purview.identity[0].principal_id
+}
+#dmz-purview.purview-identity[0].principal_id

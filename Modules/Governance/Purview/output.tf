@@ -4,6 +4,10 @@ output "purview-output" {
 }
 */
 
+output "purview-identity" {
+  value = azurerm_purview_account.purview.identity
+}
+
 output "purview-output" {
   value = {
     catalog_endpoint    = azurerm_purview_account.purview.catalog_endpoint

@@ -30,3 +30,7 @@ variable "purview_account_dns_zone_id" {
   type        = list(string)
   description = "Private DNS Zone ID for the Azure Purview (Account) resource type"
 }
+
+variable "keyvault_id" {
+  type = string
+}

@@ -9,6 +9,10 @@ output "test-out" {
 }
 
 */
-output "purview-out" {
+output "purview-output" {
   value = module.dmz-purview.purview-output
+}
+
+output "purview-2" {
+  value = module.dmz-purview.purview-identity[0].principal_id
 }
