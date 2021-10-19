@@ -113,9 +113,6 @@ module "dmz-purview" {
   ]
 }
 
-
-
-
 module "dmz-key-vault" {
   source               = "./Modules/Governance/KeyVault"
   location             = var.location
@@ -130,6 +127,33 @@ module "dmz-key-vault" {
     module.dmz-private-dns-zones
   ]
 }
+
+module "dmz-consumption-synpase-hub" {
+  source                  = "./Consumption/PrivateLinkHub"
+  location                = var.location
+  environment             = var.environment
+  rg_name                 = azurerm_resource_group.rg_dmz_consumption.name
+  svc_subnet_id           = module.dmz-vnet.services_subnet_id_out
+  synapse_web_dns_zone_id = [module.dmz-private-dns-zones.priv-dns-zones["privatelink.azuresynapse.net"].id]
+  depends_on = [
+    azurerm_resource_group.rg_dmz_consumption,
+    module.dmz-private-dns-zones
+  ]
+}
+
+module "dmz-acr" {
+  source          = "./Modules/Compute/Containers"
+  location        = var.location
+  environment     = var.environment
+  rg_name         = azurerm_resource_group.rg_dmz_container.name
+  svc_subnet_id   = module.dmz-vnet.services_subnet_id_out
+  acr_dns_zone_id = [module.dmz-private-dns-zones.priv-dns-zones["privatelink.azurecr.io"].id]
+  depends_on = [
+    azurerm_resource_group.rg_dmz_container,
+    module.dmz-private-dns-zones
+  ]
+}
+
 
 /*
 # Commenting out temporarily to reduce deploy / destroy time

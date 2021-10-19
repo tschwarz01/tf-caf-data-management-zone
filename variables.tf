@@ -130,7 +130,9 @@ variable "privatelink-dns-zone-names" {
     "privatelink.servicebus.windows.net",
     "privatelink.vaultcore.azure.net",
     "privatelink.purviewstudio.azure.com",
-    "privatelink.purview.azure.com"
+    "privatelink.purview.azure.com",
+    "privatelink.azuresynapse.net",
+    "privatelink.azurecr.io"
   ]
 }
 

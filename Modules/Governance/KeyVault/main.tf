@@ -37,4 +37,3 @@ resource "azurerm_private_endpoint" "keyvault_private_endpoint" {
     private_dns_zone_ids = var.keyvault_dns_zone_id
   }
 }
-
