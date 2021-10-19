@@ -129,7 +129,7 @@ module "dmz-key-vault" {
 }
 
 module "dmz-consumption-synpase-hub" {
-  source                  = "./Consumption/PrivateLinkHub"
+  source                  = "./Modules/Consumption/PrivateLinkHub"
   location                = var.location
   environment             = var.environment
   rg_name                 = azurerm_resource_group.rg_dmz_consumption.name
