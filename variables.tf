@@ -58,6 +58,12 @@ variable "rg-dmz-consumption-name" {
   default     = "rg-dmz-consumption"
 }
 
+variable "rg-dmz-monitor-name" {
+  type = string
+  description = "The name of the Data Management Zone monitoring resource group"
+  default = "rg-dmz-monitor"
+}
+
 /*
 variable "privatelink-dns-zone-names" {
   type        = list(string)
