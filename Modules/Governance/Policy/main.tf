@@ -163,9 +163,6 @@ POLICY_RULE
       }
     }
 PARAMETERS
-  depends_on = [
-    azurerm_log_analytics_workspace.log_analytics
-  ]
 }
 
 locals {
@@ -183,10 +180,10 @@ resource "azurerm_subscription_policy_assignment" "Assign_Diag_Activity_Log" {
   name                 = "Deploy-Diagnostics-ActivityLog"
   policy_definition_id = azurerm_policy_definition.Diag_Activity_Log.id
   subscription_id      = data.azurerm_subscription.current.id
-  parameters = local.log_analytics_workspace_id
-  location = var.location
+  parameters           = local.log_analytics_workspace_id
+  location             = var.location
   identity {
-      type = "SystemAssigned"
+    type = "SystemAssigned"
   }
 }
 
@@ -200,9 +197,9 @@ resource "azurerm_role_assignment" "Diag_Activity_Log_Role_Assignment" {
 }
 
 resource "azurerm_policy_remediation" "Diag_Activity_Log_Remediation" {
-  name                 = "diag-activity-log-remediation"
-  scope                = data.azurerm_subscription.current.id
-  policy_assignment_id = azurerm_subscription_policy_assignment.Assign_Diag_Activity_Log.id
+  name                    = "diag-activity-log-remediation"
+  scope                   = data.azurerm_subscription.current.id
+  policy_assignment_id    = azurerm_subscription_policy_assignment.Assign_Diag_Activity_Log.id
   resource_discovery_mode = "ReEvaluateCompliance"
   depends_on = [
     azurerm_role_assignment.Diag_Activity_Log_Role_Assignment

@@ -155,20 +155,20 @@ module "dmz-acr" {
 }
 
 module "dmz-log-analytics" {
-  source = "./Modules/Governance/LogAnalytics"
+  source      = "./Modules/Governance/LogAnalytics"
   location    = var.location
   environment = var.environment
-  rg_name = var.rg-dmz-monitor-name
+  rg_name     = var.rg-dmz-monitor-name
 }
 
 module "dmz-policy" {
-  source      = "./Modules/Governance/Policy"
-  location    = var.location
-  environment = var.environment
-  rg_name = var.rg-dmz-monitor-name
-  log-analytics-workspace-id      = module.dmz-nsg.id_out
+  source                     = "./Modules/Governance/Policy"
+  location                   = var.location
+  environment                = var.environment
+  rg_name                    = var.rg-dmz-monitor-name
+  log-analytics-workspace-id = module.dmz-log-analytics.log_analytics_ws_id-out
   depends_on = [
-    module.dmz-nsg
+    module.dmz-log-analytics
   ]
 }
 

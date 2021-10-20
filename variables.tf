@@ -59,9 +59,9 @@ variable "rg-dmz-consumption-name" {
 }
 
 variable "rg-dmz-monitor-name" {
-  type = string
+  type        = string
   description = "The name of the Data Management Zone monitoring resource group"
-  default = "rg-dmz-monitor"
+  default     = "rg-dmz-monitor"
 }
 
 /*

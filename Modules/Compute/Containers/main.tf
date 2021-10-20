@@ -1,5 +1,5 @@
 resource "azurerm_container_registry" "dmz_acr" {
-  name                          = "${var.environment}-containerregistry001"
+  name                          = "${var.environment}containerregistry001"
   resource_group_name           = var.rg_name
   location                      = var.location
   sku                           = "Premium"
