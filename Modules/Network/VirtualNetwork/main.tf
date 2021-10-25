@@ -1,35 +1,35 @@
-resource "azurerm_virtual_network" "dmz_vnet" {
+resource "azurerm_virtual_network" "vnet" {
   name                = "${var.environment}-network"
   address_space       = ["10.0.0.0/21"]
   location            = var.location
   resource_group_name = var.rg_name
 }
 
-resource "azurerm_subnet" "dmz_firewall_subnet" {
+resource "azurerm_subnet" "firewall_subnet" {
   name                                           = "AzureFirewallSubnet"
   resource_group_name                            = var.rg_name
-  virtual_network_name                           = azurerm_virtual_network.dmz_vnet.name
+  virtual_network_name                           = azurerm_virtual_network.vnet.name
   address_prefixes                               = ["10.0.0.0/24"]
   enforce_private_link_endpoint_network_policies = false
   enforce_private_link_service_network_policies  = false
   depends_on = [
-    azurerm_virtual_network.dmz_vnet
+    azurerm_virtual_network.vnet
   ]
 }
 
-resource "azurerm_subnet" "dmz_services_subnet" {
+resource "azurerm_subnet" "services_subnet" {
   name                                           = "${var.environment}-services-subnet"
   resource_group_name                            = var.rg_name
-  virtual_network_name                           = azurerm_virtual_network.dmz_vnet.name
+  virtual_network_name                           = azurerm_virtual_network.vnet.name
   address_prefixes                               = ["10.0.1.0/24"]
   enforce_private_link_endpoint_network_policies = true
   enforce_private_link_service_network_policies  = true
   depends_on = [
-    azurerm_virtual_network.dmz_vnet
+    azurerm_virtual_network.vnet
   ]
 }
 
-resource "azurerm_route_table" "dmz_route_table" {
+resource "azurerm_route_table" "route_table" {
   name                          = "${var.environment}-route-table"
   location                      = var.location
   resource_group_name           = var.rg_name
@@ -43,19 +43,19 @@ resource "azurerm_route_table" "dmz_route_table" {
   }
 }
 
-resource "azurerm_subnet_route_table_association" "dmz_rt_tbl_assoc" {
-  subnet_id      = azurerm_subnet.dmz_services_subnet.id
-  route_table_id = azurerm_route_table.dmz_route_table.id
+resource "azurerm_subnet_route_table_association" "rt_tbl_assoc" {
+  subnet_id      = azurerm_subnet.services_subnet.id
+  route_table_id = azurerm_route_table.route_table.id
   depends_on = [
-    azurerm_subnet.dmz_services_subnet
+    azurerm_subnet.services_subnet
   ]
 }
 
-resource "azurerm_subnet_network_security_group_association" "dmz_nsg_subnet_services_assoc" {
-  subnet_id                 = azurerm_subnet.dmz_services_subnet.id
+resource "azurerm_subnet_network_security_group_association" "nsg_subnet_services_assoc" {
+  subnet_id                 = azurerm_subnet.services_subnet.id
   network_security_group_id = var.nsg_id
   depends_on = [
-    azurerm_subnet.dmz_services_subnet,
+    azurerm_subnet.services_subnet,
     var.nsg_id
   ]
 }

@@ -6,7 +6,7 @@ variable "location" {
 variable "environment" {
   type        = string
   description = "The release stage of the environment"
-  default     = "dmz"
+  default     = "fxdatamz"
 }
 variable "rg_name" {
   type        = string
@@ -15,5 +15,5 @@ variable "rg_name" {
 
 variable "fw_subnet_id" {
   type        = string
-  description = "Firewall subnet id from the dmz-vnet module"
+  description = "Firewall subnet id from the vnet module"
 }

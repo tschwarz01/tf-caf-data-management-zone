@@ -1,15 +1,15 @@
 output "firewall_subnet_id_out" {
-  value = azurerm_subnet.dmz_firewall_subnet.id
+  value = azurerm_subnet.firewall_subnet.id
 }
 
 output "services_subnet_id_out" {
-  value = azurerm_subnet.dmz_services_subnet.id
+  value = azurerm_subnet.services_subnet.id
 }
 
-output "dmz_vnet_id_out" {
-  value = azurerm_virtual_network.dmz_vnet.id
+output "fxdatamz_vnet_id_out" {
+  value = azurerm_virtual_network.vnet.id
 }
 
-output "dmz_vnet_name_out" {
-  value = azurerm_virtual_network.dmz_vnet.name
+output "fxdatamz_vnet_name_out" {
+  value = azurerm_virtual_network.vnet.name
 }

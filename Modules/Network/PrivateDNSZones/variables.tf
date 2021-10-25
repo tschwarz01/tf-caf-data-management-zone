@@ -6,12 +6,12 @@ variable "location" {
 variable "environment" {
   type        = string
   description = "The release stage of the environment"
-  default     = "dmz"
+  default     = "fxdatamz"
 }
 variable "rg_name" {
   type        = string
   description = "The name of the resource group"
-  default     = "rg-dmz-global-dns"
+  default     = "rg-fxdatamz-global-dns"
 }
 
 variable "vnet_id" {

@@ -1,22 +1,24 @@
-variable "environment" {
-  type        = string
-  description = "The release stage of the environment"
-  default     = "dmz"
+
+variable "template_file_vars" {
+  type        = map(any)
+  description = "If specified, provides the ability to define custom template vars used when reading in template files from the library_path"
+  default = {
+    "root_scope_resource_id" = "/subscriptions/47f7e6d7-0e52-4394-92cb-5f106bbc647f"
+  }
 }
 
-variable "location" {
+variable "scope_id" {
   type        = string
-  description = "The location of the resource group"
-  default     = "southcentralus"
-}
+  description = "Specifies the scope to apply the archetype resources against."
+  default     = "/subscriptions/47f7e6d7-0e52-4394-92cb-5f106bbc647f"
 
-variable "rg_name" {
-  type        = string
-  description = "The name of the Data Management Zone monitoring resource group"
-  default     = "rg-dmz-monitor"
+  validation {
+    condition     = can(regex("^/(subscriptions|providers/Microsoft.Management/managementGroups)/[a-z0-9-]{2,36}$", var.scope_id))
+    error_message = "The scope_id value must be a valid Subscription or Management Group ID."
+  }
 }
 
 variable "log-analytics-workspace-id" {
   type    = string
-  default = "/subscriptions/47f7e6d7-0e52-4394-92cb-5f106bbc647f/resourceGroups/rg-dmz-monitor/providers/Microsoft.OperationalInsights/workspaces/dmz-log-analytics-ws"
+  default = "/subscriptions/47f7e6d7-0e52-4394-92cb-5f106bbc647f/resourceGroups/rg-monitoring/providers/Microsoft.OperationalInsights/workspaces/log-analytics-ws"
 }

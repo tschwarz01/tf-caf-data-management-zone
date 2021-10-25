@@ -1,8 +1,24 @@
-data "azurerm_subscription" "current" {}
 
-data "azurerm_client_config" "current" {}
+resource "azurerm_policy_definition" "enterprise_scale" {
+  for_each = local.azurerm_policy_definition_enterprise_scale
+
+  # Mandatory resource attributes
+  name         = each.value.template.name
+  policy_type  = "Custom"
+  mode         = each.value.template.properties.mode
+  display_name = each.value.template.properties.displayName
+
+  # Optional resource attributes
+  description = try(length(each.value.template.properties.description) > 0, false) ? each.value.template.properties.description : "${each.value.template.properties.displayName} Policy Definition at scope ${each.value.scope_id}"
+  policy_rule = try(length(each.value.template.properties.policyRule) > 0, false) ? jsonencode(each.value.template.properties.policyRule) : local.empty_string
+  metadata    = try(length(each.value.template.properties.metadata) > 0, false) ? jsonencode(each.value.template.properties.metadata) : local.empty_string
+  parameters  = try(length(each.value.template.properties.parameters) > 0, false) ? jsonencode(each.value.template.properties.parameters) : local.empty_string
+}
 
 
+
+
+/*
 resource "azurerm_policy_definition" "Diag_Activity_Log" {
   name         = "Deploy-Diagnostics-ActivityLog"
   policy_type  = "Custom"
@@ -13,9 +29,7 @@ resource "azurerm_policy_definition" "Diag_Activity_Log" {
     {
     "category": "Monitoring"
     }
-
 METADATA
-
 
   policy_rule = <<POLICY_RULE
     {
@@ -126,7 +140,6 @@ METADATA
     }
 POLICY_RULE
 
-
   parameters = <<PARAMETERS
     {
       "logAnalytics": {
@@ -165,6 +178,7 @@ POLICY_RULE
 PARAMETERS
 }
 
+
 locals {
   log_analytics_workspace_id = <<PARAMETERS
 {
@@ -175,7 +189,25 @@ locals {
 PARAMETERS
 }
 
+resource "azurerm_policy_definition" "enterprise_scale" {
+  for_each = local.azurerm_policy_definition_enterprise_scale
 
+  # Mandatory resource attributes
+  name         = each.value.template.name
+  policy_type  = "Custom"
+  mode         = each.value.template.properties.mode
+  display_name = each.value.template.properties.displayName
+
+  # Optional resource attributes
+  description = try(length(each.value.template.properties.description) > 0, false) ? each.value.template.properties.description : "${each.value.template.properties.displayName} Policy Definition at scope ${each.value.scope_id}"
+  policy_rule = try(length(each.value.template.properties.policyRule) > 0, false) ? jsonencode(each.value.template.properties.policyRule) : local.empty_string
+  metadata    = try(length(each.value.template.properties.metadata) > 0, false) ? jsonencode(each.value.template.properties.metadata) : local.empty_string
+  parameters  = try(length(each.value.template.properties.parameters) > 0, false) ? jsonencode(each.value.template.properties.parameters) : local.empty_string
+
+}
+*/
+
+/*
 resource "azurerm_subscription_policy_assignment" "Assign_Diag_Activity_Log" {
   name                 = "Deploy-Diagnostics-ActivityLog"
   policy_definition_id = azurerm_policy_definition.Diag_Activity_Log.id
@@ -186,22 +218,6 @@ resource "azurerm_subscription_policy_assignment" "Assign_Diag_Activity_Log" {
     type = "SystemAssigned"
   }
 }
+*/
 
-resource "azurerm_role_assignment" "Diag_Activity_Log_Role_Assignment" {
-  scope                = data.azurerm_subscription.current.id
-  role_definition_name = "Contributor"
-  principal_id         = azurerm_subscription_policy_assignment.Assign_Diag_Activity_Log.identity[0].principal_id
-  depends_on = [
-    azurerm_subscription_policy_assignment.Assign_Diag_Activity_Log
-  ]
-}
 
-resource "azurerm_policy_remediation" "Diag_Activity_Log_Remediation" {
-  name                    = "diag-activity-log-remediation"
-  scope                   = data.azurerm_subscription.current.id
-  policy_assignment_id    = azurerm_subscription_policy_assignment.Assign_Diag_Activity_Log.id
-  resource_discovery_mode = "ReEvaluateCompliance"
-  depends_on = [
-    azurerm_role_assignment.Diag_Activity_Log_Role_Assignment
-  ]
-}

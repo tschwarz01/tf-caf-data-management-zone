@@ -6,7 +6,7 @@ variable "location" {
 variable "environment" {
   type        = string
   description = "The release stage of the environment"
-  default     = "dmz"
+  default     = "fxdatamz"
 }
 variable "rg_name" {
   type        = string

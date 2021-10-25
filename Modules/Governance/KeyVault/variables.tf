@@ -6,13 +6,13 @@ variable "location" {
 variable "environment" {
   type        = string
   description = "The release stage of the environment"
-  default     = "dmz"
+  default     = "fxdatamz"
 }
 
 variable "rg_name" {
   type        = string
   description = "The name of the resource group"
-  default     = "rg-dmz-governance"
+  default     = "rg-governance"
 }
 
 variable "dns_rg_id" {

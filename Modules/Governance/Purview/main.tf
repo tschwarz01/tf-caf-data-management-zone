@@ -60,4 +60,3 @@ resource "azurerm_role_assignment" "purview_keyvault_role_assignment" {
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_purview_account.purview.identity[0].principal_id
 }
-#dmz-purview.purview-identity[0].principal_id

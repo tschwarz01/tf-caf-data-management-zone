@@ -1,4 +1,4 @@
-resource "azurerm_container_registry" "dmz_acr" {
+resource "azurerm_container_registry" "acr" {
   name                          = "${var.environment}containerregistry001"
   resource_group_name           = var.rg_name
   location                      = var.location
@@ -19,14 +19,14 @@ resource "azurerm_container_registry" "dmz_acr" {
 }
 
 resource "azurerm_private_endpoint" "acr_private_endpoint" {
-  name                = "${azurerm_container_registry.dmz_acr.name}-acr-private-endpoint"
+  name                = "${azurerm_container_registry.acr.name}-acr-private-endpoint"
   location            = var.location
   resource_group_name = var.rg_name
   subnet_id           = var.svc_subnet_id
 
   private_service_connection {
-    name                           = "${azurerm_container_registry.dmz_acr.name}-acr-private-endpoint-connection"
-    private_connection_resource_id = azurerm_container_registry.dmz_acr.id
+    name                           = "${azurerm_container_registry.acr.name}-acr-private-endpoint-connection"
+    private_connection_resource_id = azurerm_container_registry.acr.id
     subresource_names              = ["registry"]
     is_manual_connection           = false
   }
@@ -36,6 +36,6 @@ resource "azurerm_private_endpoint" "acr_private_endpoint" {
     private_dns_zone_ids = var.acr_dns_zone_id
   }
   depends_on = [
-    azurerm_container_registry.dmz_acr
+    azurerm_container_registry.acr
   ]
 }

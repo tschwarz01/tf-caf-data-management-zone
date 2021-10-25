@@ -2,7 +2,7 @@
 variable "environment" {
   type        = string
   description = "The release stage of the environment"
-  default     = "dmz"
+  default     = "fxdatamz"
 }
 
 variable "location" {
@@ -15,53 +15,52 @@ variable "location" {
 # Environment Specs - Resource Groups
 ###################################################
 
-
-variable "rg-dmz-net-name" {
+variable "rg-network-name" {
   type        = string
   description = "The name of the Data Management Zone network resource group"
-  default     = "rg-dmz-network"
+  default     = "rg-fxdatamz-network"
 }
 
-variable "rg-dmz-automation-name" {
+variable "rg-automation-name" {
   type        = string
   description = "The name of the Data Management Zone automation resource group"
-  default     = "rg-dmz-automation"
+  default     = "rg-fxdatamz-automation"
 }
 
-variable "rg-dmz-global-dns-name" {
+variable "rg-private-dns-zones-name" {
   type        = string
   description = "The name of the Data Management Zone global-dns resource group"
-  default     = "rg-dmz-global-dns"
+  default     = "rg-fxdatamz-global-dns"
 }
 
-variable "rg-dmz-governance-name" {
+variable "rg-governance-name" {
   type        = string
   description = "The name of the Data Management Zone governance resource group"
-  default     = "rg-dmz-governance"
+  default     = "rg-fxdatamz-governance"
 }
 
-variable "rg-dmz-mgmt-name" {
+variable "rg-mgmt-name" {
   type        = string
   description = "The name of the Data Management Zone mgmt resource group"
-  default     = "rg-dmz-mgmt"
+  default     = "rg-fxdatamz-mgmt"
 }
 
-variable "rg-dmz-container-name" {
+variable "rg-containers-name" {
   type        = string
   description = "The name of the Data Management Zone container resource group"
-  default     = "rg-dmz-container"
+  default     = "rg-fxdatamz-container"
 }
 
-variable "rg-dmz-consumption-name" {
+variable "rg-consumption-name" {
   type        = string
   description = "The name of the Data Management Zone consumption resource group"
-  default     = "rg-dmz-consumption"
+  default     = "rg-fxdatamz-consumption"
 }
 
-variable "rg-dmz-monitor-name" {
+variable "rg-monitoring-name" {
   type        = string
   description = "The name of the Data Management Zone monitoring resource group"
-  default     = "rg-dmz-monitor"
+  default     = "rg-fxdatamz-monitor"
 }
 
 /*
