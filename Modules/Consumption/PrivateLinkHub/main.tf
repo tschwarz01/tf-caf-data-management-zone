@@ -1,5 +1,9 @@
+locals {
+  safe_name = replace(var.name, "-", "")
+}
+
 resource "azurerm_synapse_private_link_hub" "synapse_hub" {
-  name                = "${var.environment}synapsehub001"
+  name                = "${local.safe_name}synapsehub001"
   resource_group_name = var.rg_name
   location            = var.location
 }

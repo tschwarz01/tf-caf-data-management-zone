@@ -1,7 +1,7 @@
 # The ingestion endpoints are currently not configurable w/ Private Endpoints via Terraform
 
 resource "azurerm_purview_account" "purview" {
-  name                   = "${var.environment}-purview001"
+  name                   = "${var.name}-purview001"
   resource_group_name    = var.rg_name
   location               = var.location
   sku_name               = "Standard_4"
@@ -54,9 +54,11 @@ resource "azurerm_private_endpoint" "purview_portal_private_endpoint" {
   ]
 }
 
-
 resource "azurerm_role_assignment" "purview_keyvault_role_assignment" {
   scope                = var.keyvault_id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_purview_account.purview.identity[0].principal_id
+  depends_on = [
+    azurerm_purview_account.purview
+  ]
 }

@@ -1,32 +1,27 @@
 #Azure Firewall Setup
 #Public IP Prefix
 resource "azurerm_public_ip_prefix" "firewall_public_ip_prefix" {
-  name                = "${var.environment}-fw-pip-prefix"
+  name                = "${var.name}-fw-pip-prefix"
   location            = var.location
   resource_group_name = var.rg_name
 
   prefix_length = 30
 
-  tags = {
-    Environment = var.environment
-  }
+  tags = var.tags
 }
 
 #Public IP
 resource "azurerm_public_ip" "firewall-public_ip" {
-  name                = "${var.environment}-fw-pip"
+  name                = "${var.name}-fw-pip"
   resource_group_name = var.rg_name
   location            = var.location
   allocation_method   = "Static"
   sku                 = "Standard"
   ip_version          = "IPv4"
-  domain_name_label   = "${var.environment}-fw-pip"
+  domain_name_label   = "${var.name}-fw-pip"
   public_ip_prefix_id = azurerm_public_ip_prefix.firewall_public_ip_prefix.id
 
-  tags = {
-    Environment = var.environment
-    Function    = "data-management-zone-azurefirewall"
-  }
+  tags = var.tags
 
   depends_on = [
     azurerm_public_ip_prefix.firewall_public_ip_prefix
@@ -34,7 +29,7 @@ resource "azurerm_public_ip" "firewall-public_ip" {
 }
 
 resource "azurerm_firewall_policy" "firewall_policy" {
-  name                = "${var.environment}-firewall-policy"
+  name                = "${var.name}-firewall-policy"
   resource_group_name = var.rg_name
   location            = var.location
   sku                 = "Premium"
@@ -48,7 +43,7 @@ resource "azurerm_firewall_policy" "firewall_policy" {
 }
 
 resource "azurerm_firewall_policy_rule_collection_group" "firewall_policy_network_rules_collection" {
-  name               = "${var.environment}-fw-pol-networkrules-collection"
+  name               = "${var.name}-fw-pol-networkrules-collection"
   firewall_policy_id = azurerm_firewall_policy.firewall_policy.id
   priority           = 10000
 
@@ -146,7 +141,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "firewall_policy_networ
 }
 
 resource "azurerm_firewall_policy_rule_collection_group" "firewall_policy_application_rules_collection" {
-  name               = "${var.environment}-fw-pol-applicationrules-collection"
+  name               = "${var.name}-fw-pol-applicationrules-collection"
   firewall_policy_id = azurerm_firewall_policy.firewall_policy.id
   priority           = 20000
 
@@ -366,18 +361,18 @@ resource "azurerm_firewall_policy_rule_collection_group" "firewall_policy_applic
     }
   }
   depends_on = [
-    azurerm_firewall_policy.firewall_policy,
-    azurerm_firewall_policy_rule_collection_group.firewall_policy_network_rules_collection
+    azurerm_firewall_policy.firewall_policy
   ]
 }
 
 #Azure Firewall Instance
 resource "azurerm_firewall" "firewall" {
-  name                = "${var.environment}-firewall"
+  name                = "${var.name}-firewall"
   location            = var.location
   resource_group_name = var.rg_name
   sku_tier            = "Premium"
   firewall_policy_id  = azurerm_firewall_policy.firewall_policy.id
+
 
   ip_configuration {
     name                 = "fw-ipconfig"
@@ -387,4 +382,8 @@ resource "azurerm_firewall" "firewall" {
   depends_on = [
     azurerm_firewall_policy.firewall_policy
   ]
+}
+
+output "firewall_private_ip" {
+  value = azurerm_firewall.firewall.ip_configuration[0].private_ip_address
 }

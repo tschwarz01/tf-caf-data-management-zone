@@ -1,8 +1,13 @@
-variable "environment" {
+variable "name" {
   type        = string
-  description = "The release stage of the environment"
-  default     = "fxdatamz"
+  description = "Name which will be appended / prepended to Azure resource names"
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "Tags that should be applied to all deployed resources"
+}
+
 
 variable "location" {
   type        = string

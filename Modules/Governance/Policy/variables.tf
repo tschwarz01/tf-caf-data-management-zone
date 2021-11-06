@@ -22,3 +22,14 @@ variable "log-analytics-workspace-id" {
   type    = string
   default = "/subscriptions/47f7e6d7-0e52-4394-92cb-5f106bbc647f/resourceGroups/rg-monitoring/providers/Microsoft.OperationalInsights/workspaces/log-analytics-ws"
 }
+
+
+variable "name" {
+  type        = string
+  description = "Name which will be appended / prepended to Azure resource names"
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Tags that should be applied to all deployed resources"
+}

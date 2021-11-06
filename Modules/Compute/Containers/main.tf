@@ -1,5 +1,9 @@
+locals {
+  safe_name = replace(var.name, "-", "")
+}
+
 resource "azurerm_container_registry" "acr" {
-  name                          = "${var.environment}containerregistry001"
+  name                          = "${local.safe_name}containerregistry001"
   resource_group_name           = var.rg_name
   location                      = var.location
   sku                           = "Premium"

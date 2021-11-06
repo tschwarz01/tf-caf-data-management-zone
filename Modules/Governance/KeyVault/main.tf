@@ -1,6 +1,6 @@
 
 resource "azurerm_key_vault" "key_vault" {
-  name                            = "${var.environment}-vault001"
+  name                            = "${var.name}-mzvaultg001"
   location                        = var.location
   resource_group_name             = var.rg_name
   tenant_id                       = var.tenant_id
